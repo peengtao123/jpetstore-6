@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-       Copyright 2010-2019 the original author or authors.
+       Copyright 2010-2020 the original author or authors.
 
        Licensed under the Apache License, Version 2.0 (the "License");
        you may not use this file except in compliance with the License.
@@ -120,6 +120,17 @@
       <version>${hsqldb.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>1.0.18</version>
+    </dependency>
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.22</version>
+    </dependency>
+
     <!-- Test dependencies -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -166,6 +177,12 @@
   </dependencies>
 
   <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <filtering>true</filtering>
+      </resource>
+    </resources>
     <finalName>jpetstore</finalName>
     <pluginManagement>
       <plugins>
@@ -183,6 +200,7 @@
           <artifactId>maven-site-plugin</artifactId>
           <configuration>
             <locales>en,es,ja,ko</locales>
+            <port>8082</port>
           </configuration>
         </plugin>
         <plugin>
@@ -307,7 +325,7 @@
       <id>tomcat85</id>
       <properties>
         <tomcat.major-version>8</tomcat.major-version>
-        <tomcat.version>8.5.47</tomcat.version>
+        <tomcat.version>8.0.27</tomcat.version>
       </properties>
     </profile>
     <profile>

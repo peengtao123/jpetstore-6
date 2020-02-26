@@ -28,14 +28,9 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
      http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
-   <!-- in-memory database and a datasource -->
-    <jdbc:embedded-database id="dataSource">
-        <jdbc:script location="classpath:database/jpetstore-hsqldb-schema.sql"/>
-        <jdbc:script location="classpath:database/jpetstore-hsqldb-dataload.sql"/>
-    </jdbc:embedded-database>
 
     <!-- 数据源配置, 使用 BoneCP 数据库连接池 -->
-    <bean id="dataSource_order" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
           destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/bgy_admin?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true"/>
@@ -81,27 +76,9 @@
         <property name="logSlowSql" value="true"/>
     </bean>
 
-    <jdbc:initialize-database data-source="dataSource_order">
+    <jdbc:initialize-database data-source="dataSource">
         <jdbc:script location="classpath:db-schema.sql"/>
         <jdbc:script location="classpath:db-test-data.sql"/>
     </jdbc:initialize-database>
-    <!-- transaction manager, use DataSourceTransactionManager" for JDBC local tx -->
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource" />
-    </bean>
 
-    <!-- enable component scanning and autowire (beware that this does not enable mapper scanning!) -->
-    <context:component-scan base-package="org.mybatis.jpetstore.service" />
-
-    <!-- enable transaction demarcation with annotations -->
-    <tx:annotation-driven />
-
-    <!-- define the SqlSessionFactory -->
-    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource" />
-        <property name="typeAliasesPackage" value="org.mybatis.jpetstore.domain" />
-    </bean>
-
-    <!-- scan for mappers and let them be autowired -->
-    <mybatis:scan base-package="org.mybatis.jpetstore.mapper" />
 </beans>
