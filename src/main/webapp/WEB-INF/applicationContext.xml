@@ -81,7 +81,7 @@
         <property name="logSlowSql" value="true"/>
     </bean>
 
-    <jdbc:initialize-database data-source="dataSource_order">
+    <jdbc:initialize-database data-source="dataSource_demo">
         <jdbc:script location="classpath:db-schema.sql"/>
         <jdbc:script location="classpath:db-test-data.sql"/>
     </jdbc:initialize-database>
@@ -104,4 +104,16 @@
 
     <!-- scan for mappers and let them be autowired -->
     <mybatis:scan base-package="org.mybatis.jpetstore.mapper" />
+
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
+
+    <bean id="dataSource_demo" destroy-method="close"
+          class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
 </beans>
