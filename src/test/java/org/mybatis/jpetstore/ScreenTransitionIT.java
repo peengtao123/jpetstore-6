@@ -1,5 +1,5 @@
 /**
- *    Copyright 2010-2019 the original author or authors.
+ *    Copyright 2010-2020 the original author or authors.
  *
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -52,9 +52,9 @@ class ScreenTransitionIT {
   @BeforeAll
   static void setupSelenide() {
     browser = CHROME;
-    headless = true;
+    headless = false;
     timeout = TimeUnit.SECONDS.toMillis(10);
-    baseUrl = "http://localhost:8080/jpetstore";
+    baseUrl = "http://localhost:8085/jpetstore";
   }
 
   @AfterEach

@@ -28,6 +28,20 @@
      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
      http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring.xsd">
 
+    <bean id="projectProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="singleton" value="true" />
+        <property name="locations">
+            <list>
+                <value>file:C:/work/shouchuang/project.properties</value>
+                <value>file:C:/work/shouchuang/service/module-order.properties</value>
+            </list>
+        </property>
+
+    </bean>
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+        <property name="properties" ref="projectProperties" />
+    </bean>
+
    <!-- in-memory database and a datasource -->
     <jdbc:embedded-database id="dataSource">
         <jdbc:script location="classpath:database/jpetstore-hsqldb-schema.sql"/>
@@ -37,10 +51,10 @@
     <!-- 数据源配置, 使用 BoneCP 数据库连接池 -->
     <bean id="dataSource_order" class="com.alibaba.druid.pool.DruidDataSource" init-method="init"
           destroy-method="close">
-        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="jdbc:mysql://127.0.0.1:3306/bgy_admin?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true"/>
-        <property name="username" value="root" />
-        <property name="password" value="TvfzyL6VmpmkVytreXVr6TP2w2+LXcDjwt3bjtTz1fYl/FXgm1gyARv74MFstYwz4mYRx0a73L7T684x06awQw=="/>
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}"/>
 
         <!--initialSize: 初始化连接-->
         <property name="initialSize" value="20"/>
@@ -68,7 +82,7 @@
         <!--<property name="filters" value="stat,wall" />-->
         <property name="filters" value="config" />
         <!-- 开启数据库密码解密-->
-        <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=MFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAOn7HJsQqwz7GKqdCzRARshc7p9dNIj9FbhCYPQGg0PcOW9KV1kmhhfot63r3sF8ayMUwIHpsOQn4U84q5jaLjECAwEAAQ==" />
+        <property name="connectionProperties" value="config.decrypt=true;config.decrypt.key=${publickey}" />
         <property name="proxyFilters">
             <list>
                 <ref bean="stat-filter"/>
@@ -81,7 +95,7 @@
         <property name="logSlowSql" value="true"/>
     </bean>
 
-    <jdbc:initialize-database data-source="dataSource_demo">
+    <jdbc:initialize-database data-source="dataSource_order">
         <jdbc:script location="classpath:db-schema.sql"/>
         <jdbc:script location="classpath:db-test-data.sql"/>
     </jdbc:initialize-database>
@@ -105,15 +119,15 @@
     <!-- scan for mappers and let them be autowired -->
     <mybatis:scan base-package="org.mybatis.jpetstore.mapper" />
 
-    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
-        <property name="locations" value="classpath:jdbc.properties"/>
-    </bean>
+<!--    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">-->
+<!--        <property name="locations" value="classpath:jdbc.properties"/>-->
+<!--    </bean>-->
 
-    <bean id="dataSource_demo" destroy-method="close"
-          class="org.apache.commons.dbcp.BasicDataSource">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-    </bean>
+<!--    <bean id="dataSource_demo" destroy-method="close"-->
+<!--          class="org.apache.commons.dbcp.BasicDataSource">-->
+<!--        <property name="driverClassName" value="${driverClassName}"/>-->
+<!--        <property name="url" value="${url}"/>-->
+<!--        <property name="username" value="${username}"/>-->
+<!--        <property name="password" value="${password}"/>-->
+<!--    </bean>-->
 </beans>
